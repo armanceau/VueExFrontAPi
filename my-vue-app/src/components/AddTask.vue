@@ -1,6 +1,9 @@
 <script setup>
 import { ref, onMounted } from 'vue';
 
+// const test = fetch ('http://localhost:3000/tasks').then(response => response.json()).then(data => console.log(data))
+
+// console.log("test : " + await data)
 // Variables réactives pour les tâches et les erreurs
 const mesDonnees = ref([]);
 const erreur = ref(null);
