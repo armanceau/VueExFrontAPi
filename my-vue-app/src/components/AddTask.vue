@@ -1,9 +1,24 @@
 <script setup>
 import { ref, onMounted } from 'vue';
 
-// const test = fetch ('http://localhost:3000/tasks').then(response => response.json()).then(data => console.log(data))
+//Définition de task 
+let tasks = ref([])
 
-// console.log("test : " + await data)
+//Connexion a api pour récupérer task
+fetch('http://localhost:3000/tasks')
+  .then(response => response.json())
+  .then(backendTasks => {
+    tasks.value = backendTasks
+  })
+//Pour afficher : 
+{/* <ul v-if="tasks.length > 0">
+      <li v-for="(task, index) in tasks" :key="index">
+        {{ task.nom }} | {{ task._id }}
+      </li>
+    </ul> */}
+
+
+
 // Variables réactives pour les tâches et les erreurs
 const mesDonnees = ref([]);
 const erreur = ref(null);
@@ -15,16 +30,14 @@ const _id = ref(''); // Assurez-vous que _id est bien généré ou fourni
 
 // Fonction pour récupérer les tâches depuis l'API
 const recupererDonnees = async () => {
-  try {
-    const response = await fetch('http://localhost:3000/tasks');
-    if (!response.ok) {
-      throw new Error('Erreur réseau');
-    }
-    mesDonnees.value = await response.json();
-  } catch (error) {
-    erreur.value = 'Erreur lors de la récupération des données : ' + error.message;
-  }
+  fetch('http://localhost:3000/tasks')
+    .then(response => response.json())
+    .then(backendTasks => {
+      tasks.value = backendTasks
+    })
 };
+
+conol
 
 // Fonction pour ajouter une tâche
 const ajouterTache = async () => {
@@ -68,6 +81,8 @@ onMounted(() => {
 
 <template>
   <div class="card">
+
+
     <h2>Ajouter une tâche</h2>
     <form @submit.prevent="ajouterTache">
       <div>
@@ -91,8 +106,8 @@ onMounted(() => {
     </div>
 
     <!-- Affichage des données récupérées -->
-    <ul v-if="mesDonnees.length > 0">
-      <li v-for="(task, index) in mesDonnees" :key="index">
+    <ul v-if="tasks.length > 0">
+      <li v-for="(task, index) in tasks" :key="index">
         {{ task.nom }} | {{ task._id }}
       </li>
     </ul>
